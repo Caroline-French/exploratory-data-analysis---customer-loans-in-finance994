@@ -75,15 +75,16 @@ def load_credentials():
         credentials = yaml.safe_load(file)
         return credentials
 
-credentials = load_credentials()
-test_database = RDSDatabaseConnector(credentials)
-test_database.initialise_SQLAlchemy()
-test_database.create_df()
-test_database.save_data()
+if __name__ == "__main__":
+    credentials = load_credentials()
+    test_database = RDSDatabaseConnector(credentials)
+    test_database.initialise_SQLAlchemy()
+    test_database.create_df()
+    test_database.save_data()
 
-def create_df():
+def explore_df():
     """
-    loads the data into a Pandas dataframe and returns information about the dataframe
+    loads the data from the local .csv file into a Pandas dataframe and returns information about the dataframe
     """
 
     df = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv")
@@ -93,5 +94,5 @@ def create_df():
     print ("\n")
     print ("Column names:\n", df.columns.to_list())
 
-create_df()
+explore_df()
 
