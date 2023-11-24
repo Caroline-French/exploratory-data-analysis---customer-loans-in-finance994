@@ -1,15 +1,17 @@
-## finish the docstrings
-## check if methods need to be private
-
-import yaml
 from sqlalchemy import create_engine
 import pandas as pd
 import psycopg2
+import yaml
 
 class RDSDatabaseConnector:
+    """
+    This class is used to access the loans dataset from AWS RDS, create a Pandas dataframe, and save the data locally as a .csv file
+     
+    Attributes:
+        credentials (dict): the host, port, database, user, and password needed to access the database
+        engine (function): the function in the class that initialises the SQLAlchemy engine
+    """
 
-## Write the __init__ method of your RDSDatabaseConnector class. 
-## It should take in as a parameter a dictionary of credentials which your function from the previous step will extract.
 
     def __init__(self, credentials):
         self.credentials = credentials
@@ -17,7 +19,10 @@ class RDSDatabaseConnector:
 
     def initialise_SQLAlchemy(self):
         """
-        initialises a SQLAcademy engine from credentials provided to RDSDatabaseConnector class
+        This function initialises a SQLAcademy engine from credentials provided to RDSDatabaseConnector class
+
+        Returns:
+            SQLAcademy engine
         """
         
         database_type = "postgresql"
@@ -43,6 +48,9 @@ class RDSDatabaseConnector:
     def create_df(self):
         """
         extracts data from the RDS database and returns as a Pandas dataframe
+
+        Returns:
+          The loan payments data as a Pandas dataframe
         """
 
         loan_payments_df = pd.read_sql_table('loan_payments', self.engine)
@@ -54,7 +62,7 @@ class RDSDatabaseConnector:
         """
 
         loan_payments_df = self.create_df() 
-        loan_payments_df.to_csv("C:/Users/Caroline/Documents/finance_project/loan_payments.csv", index=False)
+        loan_payments_df.to_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv", index=False)
 
 
 def load_credentials():
@@ -62,7 +70,7 @@ def load_credentials():
     loads credentials to access the RDS database, to be passed as an argument into the RDSDatabaseConnector class
     """
 
-    file_path = "C:/Users/Caroline/Documents/finance_project/credentials.yaml"
+    file_path = "C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/credentials.yaml"
     with open(file_path, "r") as file:
         credentials = yaml.safe_load(file)
         return credentials
@@ -78,7 +86,7 @@ def create_df():
     loads the data into a Pandas dataframe and returns information about the dataframe
     """
 
-    df = pd.read_csv("C:/Users/Caroline/Documents/finance_project/loan_payments.csv")
+    df = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv")
     print ("Shape of the dataframe (number of rows, number of columns):", df.shape)
     print ("\n")
     print ("Dataframe head: \n", df.head())
