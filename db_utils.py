@@ -82,17 +82,4 @@ if __name__ == "__main__":
     test_database.create_df()
     test_database.save_data()
 
-def explore_df():
-    """
-    loads the data from the local .csv file into a Pandas dataframe and returns information about the dataframe
-    """
-
-    df = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv")
-    print ("Shape of the dataframe (number of rows, number of columns):", df.shape)
-    print ("\n")
-    print ("Dataframe head: \n", df.head())
-    print ("\n")
-    print ("Column names:\n", df.columns.to_list())
-
-explore_df()
 
