@@ -96,7 +96,7 @@ loan_df = DataFrameInfo(data_load)
 #check max value to decide best int type
 # loan_df.describe_data(["loan_amount", "funded_amount", "dti"])
 
-loan_df.print_unique("application_type")
+loan_df.print_unique("mths_since_last_record")
 # loan_df.describe_data("total_accounts")
 
 
