@@ -124,8 +124,8 @@ if __name__ == "__main__":
     ## 11 transform home_ownership to category
     loan_df.transform_dtype("home_ownership", "category")
 
-    ## 12 transform annual_inc to float16 for memory efficiency
-    loan_df.transform_dtype("annual_inc", "float16")
+    ## 12 transform annual_inc to float32 for memory efficiency
+    loan_df.transform_dtype("annual_inc", "float32")
 
     ## 13 transform verification_status to category
     loan_df.transform_dtype("verification_status", "category")

@@ -1,7 +1,8 @@
+from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd 
+import statsmodels.api as sm
 
-## remember running this alone will always be accessing the original df not including any transformations
 
 class DataFrameInfo:
 
@@ -81,9 +82,43 @@ class DataFrameInfo:
             selected_columns = self.df.loc[:, column_name].describe()  
         print (f"\nDescription of column '{column_name}':\n\n",selected_columns)
 
+   
+    def count_matching(self, column_A, column_B):
+        """
+        this method counts how many values match in 2 given columns
         
+        arguments:
+            column_A(str): the name of the first column to compare
+            column_b(str): the name of the second column to compare
+        """
+        matching_values_count = (self.df[column_A] == self.df[column_B]).sum()
+        print (f"Total number of matching values in {column_A} and {column_B}: {matching_values_count}")
+
+   
+    def sort_column(self, column_name):
+        """
+        this method sorts the dataframe by a given column in ascending order
+        
+        arguments:
+            column_name(str): the name of the column to sort by
+        """
+        self.df.sort_values(by=column_name, ascending=True, inplace=True)
+
+    
+    def check_skew(self):
+        numerical_columns = self.df.select_dtypes(include='number')
+        skew_result = numerical_columns.skew()
+        print(skew_result)
        
-data_load = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv")
+    def qq_plot(self, column_name):
+        sm.qqplot(self.df[column_name], line="s")
+        plt.title("QQ Plot")
+        plt.show()
+
+
+##data_load = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv")
+
+data_load = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments_complete_data.csv")
 loan_df = DataFrameInfo(data_load)
 
 ## loan_df.explore_df()
@@ -96,7 +131,12 @@ loan_df = DataFrameInfo(data_load)
 #check max value to decide best int type
 # loan_df.describe_data(["loan_amount", "funded_amount", "dti"])
 
-loan_df.print_unique("mths_since_last_record")
+## loan_df.print_unique("mths_since_last_record")
 # loan_df.describe_data("total_accounts")
 
+## loan_df.count_matching("loan_amount", "funded_amount")
 
+## loan_df.check_skew()
+## loan_df.qq_plot("loan_amount")
+
+loan_df.describe_data("loan_amount")

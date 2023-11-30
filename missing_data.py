@@ -41,12 +41,40 @@ class DataFrameTransform:
         """
         self.df.dropna(subset=[column_name], inplace=True)
 
+    
+    def fill_missing_from_column(self, column_to, column_from):
+        """
+        this method fills the missing values in a column with the value from another column in the same row
+        
+        arguments:
+            column_to(str): the name of the column with missing values to fill
+            column_from(str): the name of the column to take the values from
+        """
+        self.df[column_to].fillna(self.df[column_from], inplace=True)
+
+    def impute_mean(self, column_name):
+        """
+        this method imputes missing values in a given column with the mean value of that column
+        
+        arguments:
+            column_name(str): the name of the column to impute mean values
+        """
+        self.df[column_name].fillna(self.df[column_name].mean(), inplace=True)
+
     def visualise_missing(self):
         """
         this method prints a plot of the missing data in each column
         """
         print(msno.matrix(self.df))
 
+    def save_changes(self, file_name):
+        """
+        this method saves the changes to a new csv file in the current directory
+        
+        arguments:
+            file_name(str): the new file name, include the .csv extension
+        """
+        self.df.to_csv(file_name, index=False)
 
 if __name__ == "__main__":
     data_load = pd.read_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments_transformed_columns.csv")
@@ -65,13 +93,23 @@ if __name__ == "__main__":
     ## dropping columns with missing data that are unlikely to be useful in the analysis
     loan_df.drop_column("next_payment_date")
     loan_df.drop_column("last_payment_date")
+    loan_df.drop_column("term_months")
 
     ## dropping rows with missing data where could be important to keep the column
     loan_df.drop_rows_with_missing("last_credit_pull_date")
     loan_df.drop_rows_with_missing("collections_12_mths_ex_med")
+    loan_df.drop_rows_with_missing("employment_years")
 
+    ## filling missing values in the funded_amount column using the loan_amount column as 50283 matches
+    loan_df.fill_missing_from_column("funded_amount", "loan_amount")
+
+    ## fill missing values with the mean for int_rate column
+    loan_df.impute_mean("int_rate")
 
     ## check columns and rows dropped successfully
     loan_df.check_null_values()
-
+    loan_df.visualise_missing()
+    
+    ## save the new df
+    loan_df.save_changes("loan_payments_complete_data.csv")
 
