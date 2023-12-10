@@ -5,7 +5,7 @@ import yaml
 
 class RDSDatabaseConnector:
     """
-    This class is used to access the loans dataset from AWS RDS, create a Pandas dataframe, and save the data locally as a .csv file
+    This class is used to access a dataset from AWS RDS, create a Pandas dataframe, and save the data locally as a .csv file
      
     Attributes:
         credentials (dict): the host, port, database, user, and password needed to access the database
@@ -50,21 +50,23 @@ class RDSDatabaseConnector:
         extracts data from the RDS database and returns as a Pandas dataframe
 
         Returns:
-          The loan payments data as a Pandas dataframe
+          The data as a Pandas dataframe
         """
 
-        loan_payments_df = pd.read_sql_table('loan_payments', self.engine)
-        return loan_payments_df
-
-    def save_data(self):
+        df = pd.read_sql_table("loan_payments", self.engine)
+        return df
+    
+    def save_data(self, filename):
         """
-        saves the data as a .csv file to the specified file path on the local machine
+        saves the data as a .csv file to the current file path on the local machine
+
+        arguments:
+            filename(str): the name of the file to save, including .csv extension
         """
+        df = self.create_df()
+        df.to_csv(filename, index=False)
 
-        loan_payments_df = self.create_df() 
-        loan_payments_df.to_csv("C:/Users/Caroline/Documents/finance_project/exploratory-data-analysis---customer-loans-in-finance994/loan_payments.csv", index=False)
-
-
+   
 def load_credentials():
     """
     loads credentials to access the RDS database, to be passed as an argument into the RDSDatabaseConnector class
@@ -74,12 +76,13 @@ def load_credentials():
     with open(file_path, "r") as file:
         credentials = yaml.safe_load(file)
         return credentials
+    
 
 if __name__ == "__main__":
     credentials = load_credentials()
     test_database = RDSDatabaseConnector(credentials)
     test_database.initialise_SQLAlchemy()
     test_database.create_df()
-    test_database.save_data()
+    test_database.save_data("loan_payments2.csv")
 
 
